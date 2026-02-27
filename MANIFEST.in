@@ -1,2 +1,0 @@
-include README.md
-recursive-include meme_errors/sounds *.mp3
