@@ -1,6 +1,6 @@
 # Meme Errors
 
-
+### meme sound file credits : https://www.myinstants.com/en/search/
 
 Play funny meme sounds whenever Python exceptions occur — **even if the error is handled!** Customize your sounds per exception type, set trim duration, and enjoy some chaotic developer humor. 
 
