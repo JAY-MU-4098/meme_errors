@@ -15,7 +15,7 @@ DEFAULT_SOUNDS = {
 }
 
 
-def play_meme_sound(exc_type):
+def play_meme_sound(exc_type, duration_ms=3000):
     # Get sound file based on exception name
     sound_file = DEFAULT_SOUNDS.get(exc_type.__name__, DEFAULT_SOUNDS["Exception"])
     try:
@@ -31,7 +31,7 @@ def play_meme_sound(exc_type):
             start_time = pygame.time.get_ticks()
             while pygame.mixer.music.get_busy():
                 # Stop if it exceeds 3 seconds (3000ms)
-                if pygame.time.get_ticks() - start_time > 3000:
+                if pygame.time.get_ticks() - start_time > duration_ms:
                     pygame.mixer.music.stop()
                     break
                 pygame.time.Clock().tick(10)
@@ -51,13 +51,28 @@ sys.excepthook = meme_excepthook
 
 
 # Decorator for function-level errors
-def meme_sound_on_error(func):
+def meme_sound_on_error(func=None, *, duration_ms=3000):
+    """
+    Usage:
+
+    @meme_sound_on_error
+    def func(): ...
+
+    OR
+
+    @meme_sound_on_error(duration_ms=5000)
+    def func(): ...
+    """
+
+    if func is None:
+        return lambda f: meme_sound_on_error(f, duration_ms=duration_ms)
+
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
         except Exception as e:
-            play_meme_sound(type(e))
-            raise e
+            play_meme_sound(type(e), duration_ms=duration_ms)
+            raise
 
     return wrapper
 
